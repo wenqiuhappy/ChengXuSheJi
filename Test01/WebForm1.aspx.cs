@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Data;
 
 namespace Test01
 {
@@ -11,7 +12,23 @@ namespace Test01
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            db.getdt("select * from wwww");
+            System.Data.DataTable dt = new System.Data.DataTable();
+            dt.Columns.Add("id");
+            dt.Columns.Add("name");
+
+            for (int i = 0; i < 100; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = new Random().Next(1,1000);
+                dr[1] = DateTime.Now.ToString();
+                dt.Rows.Add(dr);
+                System.Threading.Thread.Sleep( new Random().Next(300));
+            }
+            GridView1.DataSource = dt.DefaultView;
+            GridView1.DataBind();
         }
+
+
+        
     }
 }

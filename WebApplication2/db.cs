@@ -5,23 +5,23 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Test01
+namespace WebApplication2
 {
     public class db
     {
-
-        static string connstr = System.Configuration.ConfigurationManager.AppSettings["connstr"].ToString();
+        static string connstr = "data source=.; initial catalog=test1; user id=sa; password=sa1234;";
 
         public static DataTable getdt(string s)
         {
-            using (SqlConnection conn = new SqlConnection(connstr))
+            using (SqlConnection conn=new SqlConnection(connstr))
             {
                 SqlCommand cmd = new SqlCommand(s, conn);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                DataTable t = new DataTable();
-                adapter.Fill(t);
+                if (conn.State != ConnectionState.Open) conn.Open();
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable r = new DataTable();
+                sda.Fill(r);
                 conn.Close();
-                return t;
+                return r;
             }
         }
 
@@ -31,9 +31,9 @@ namespace Test01
             {
                 SqlCommand cmd = new SqlCommand(s, conn);
                 if (conn.State != ConnectionState.Open) conn.Open();
-                int t = cmd.ExecuteNonQuery();
+                int r = cmd.ExecuteNonQuery();
                 conn.Close();
-                return t;
+                return r;
             }
         }
 
@@ -43,9 +43,9 @@ namespace Test01
             {
                 SqlCommand cmd = new SqlCommand(s, conn);
                 if (conn.State != ConnectionState.Open) conn.Open();
-                object t = cmd.ExecuteScalar();
+                object r = cmd.ExecuteScalar();
                 conn.Close();
-                return t;
+                return r;
             }
         }
     }
